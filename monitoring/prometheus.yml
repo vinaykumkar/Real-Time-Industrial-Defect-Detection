@@ -1,0 +1,16 @@
+# Prometheus configuration for the Real-Time Industrial Defect Detection System
+# Scrape interval tuned for near-real-time dashboards.
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+
+scrape_configs:
+  - job_name: "defect-detection-app"
+    metrics_path: /metrics
+    static_configs:
+      # docker-compose service name (from inside the monitoring network).
+      # When running the app natively on Windows, replace with host.docker.internal:8000
+      # or 127.0.0.1:8000 if Prometheus runs natively too.
+      - targets: ["app:8000"]
+        labels:
+          service: "industrial-defect-detection"

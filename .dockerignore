@@ -1,0 +1,22 @@
+# Keep the build context small — everything mounted at runtime is excluded here
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# datasets / artifacts mounted as volumes or fetched at runtime
+data/raw/
+data/demo/
+data/detections.db
+data/yolo/*
+!data/yolo/data.yaml
+outputs/
+logs/
+models/
+
+# archives / docs not needed inside the image
+*.zip
+*.mp4
+.git/

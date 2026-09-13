@@ -1,0 +1,12 @@
+{
+  "frames_requested": 320,
+  "frames_processed": 320,
+  "wall_seconds": 6.2,
+  "avg_pipeline_fps": 51.97,
+  "measured_fps_reported": 59.13,
+  "avg_inference_ms": 16.04,
+  "rss_before_mb": 287.7,
+  "rss_after_mb": 290.3,
+  "rss_growth_mb": 2.6,
+  "verdict": "STABLE"
+}

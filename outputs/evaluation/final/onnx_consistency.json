@@ -1,0 +1,10 @@
+{
+  "images_compared": 40,
+  "top_class_agreement": 1.0,
+  "images_both_empty": 0,
+  "median_top_box_iou": 1.0,
+  "mean_top_confidence_delta": 0.0,
+  "mean_detections_pt": 2.1,
+  "mean_detections_onnx": 2.1,
+  "verdict": "CONSISTENT"
+}

@@ -1,0 +1,27 @@
+# Real-Time Industrial Defect Detection System
+# Python 3.10+ / Windows-first
+# Install: pip install -r requirements.txt
+# NOTE: For CUDA acceleration install a torch build matching your CUDA version:
+#   https://pytorch.org/get-started/locally/
+# The default install below is CPU-compatible and works everywhere.
+
+ultralytics>=8.2.0
+torch>=2.1.0
+torchvision>=0.16.0
+opencv-python>=4.8.0
+fastapi>=0.110.0
+uvicorn[standard]>=0.29.0
+python-multipart>=0.0.9
+numpy>=1.26.0
+pandas>=2.0.0
+albumentations>=1.4.0
+onnx>=1.15.0
+onnxruntime>=1.17.0
+prometheus-client>=0.20.0
+pydantic>=2.6.0
+PyYAML>=6.0
+Pillow>=10.0.0
+matplotlib>=3.8.0
+sqlalchemy>=2.0.0
+pytest>=8.0.0
+httpx>=0.27.0

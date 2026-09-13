@@ -1,0 +1,218 @@
+{
+  "model": "outputs\\training\\runs\\exp_imgsz320\\weights\\best.pt",
+  "imgsz": 320,
+  "iou_match": 0.5,
+  "images": 360,
+  "results": [
+    {
+      "threshold": 0.1,
+      "tp": 668,
+      "fp": 577,
+      "fn": 186,
+      "precision": 0.5365,
+      "recall": 0.7822,
+      "f1": 0.6365,
+      "false_negative_rate": 0.2178,
+      "by_class": {
+        "crazing": {
+          "tp": 103,
+          "fp": 154,
+          "fn": 59
+        },
+        "inclusion": {
+          "tp": 130,
+          "fp": 85,
+          "fn": 29
+        },
+        "patches": {
+          "tp": 178,
+          "fp": 61,
+          "fn": 15
+        },
+        "pitted_surface": {
+          "tp": 63,
+          "fp": 24,
+          "fn": 24
+        },
+        "rolled-in_scale": {
+          "tp": 101,
+          "fp": 156,
+          "fn": 31
+        },
+        "scratches": {
+          "tp": 93,
+          "fp": 97,
+          "fn": 28
+        }
+      }
+    },
+    {
+      "threshold": 0.25,
+      "tp": 585,
+      "fp": 271,
+      "fn": 269,
+      "precision": 0.6834,
+      "recall": 0.685,
+      "f1": 0.6842,
+      "false_negative_rate": 0.315,
+      "by_class": {
+        "crazing": {
+          "tp": 77,
+          "fp": 58,
+          "fn": 85
+        },
+        "inclusion": {
+          "tp": 120,
+          "fp": 46,
+          "fn": 39
+        },
+        "patches": {
+          "tp": 168,
+          "fp": 37,
+          "fn": 25
+        },
+        "pitted_surface": {
+          "tp": 60,
+          "fp": 11,
+          "fn": 27
+        },
+        "rolled-in_scale": {
+          "tp": 76,
+          "fp": 59,
+          "fn": 56
+        },
+        "scratches": {
+          "tp": 84,
+          "fp": 60,
+          "fn": 37
+        }
+      }
+    },
+    {
+      "threshold": 0.35,
+      "tp": 546,
+      "fp": 178,
+      "fn": 308,
+      "precision": 0.7541,
+      "recall": 0.6393,
+      "f1": 0.692,
+      "false_negative_rate": 0.3607,
+      "by_class": {
+        "crazing": {
+          "tp": 60,
+          "fp": 36,
+          "fn": 102
+        },
+        "inclusion": {
+          "tp": 117,
+          "fp": 29,
+          "fn": 42
+        },
+        "patches": {
+          "tp": 165,
+          "fp": 25,
+          "fn": 28
+        },
+        "pitted_surface": {
+          "tp": 58,
+          "fp": 7,
+          "fn": 29
+        },
+        "rolled-in_scale": {
+          "tp": 64,
+          "fp": 38,
+          "fn": 68
+        },
+        "scratches": {
+          "tp": 82,
+          "fp": 43,
+          "fn": 39
+        }
+      }
+    },
+    {
+      "threshold": 0.5,
+      "tp": 460,
+      "fp": 86,
+      "fn": 394,
+      "precision": 0.8425,
+      "recall": 0.5386,
+      "f1": 0.6571,
+      "false_negative_rate": 0.4614,
+      "by_class": {
+        "crazing": {
+          "tp": 34,
+          "fp": 13,
+          "fn": 128
+        },
+        "inclusion": {
+          "tp": 102,
+          "fp": 13,
+          "fn": 57
+        },
+        "patches": {
+          "tp": 154,
+          "fp": 13,
+          "fn": 39
+        },
+        "pitted_surface": {
+          "tp": 57,
+          "fp": 3,
+          "fn": 30
+        },
+        "rolled-in_scale": {
+          "tp": 36,
+          "fp": 15,
+          "fn": 96
+        },
+        "scratches": {
+          "tp": 77,
+          "fp": 29,
+          "fn": 44
+        }
+      }
+    },
+    {
+      "threshold": 0.6,
+      "tp": 385,
+      "fp": 48,
+      "fn": 469,
+      "precision": 0.8891,
+      "recall": 0.4508,
+      "f1": 0.5983,
+      "false_negative_rate": 0.5492,
+      "by_class": {
+        "crazing": {
+          "tp": 13,
+          "fp": 4,
+          "fn": 149
+        },
+        "inclusion": {
+          "tp": 91,
+          "fp": 7,
+          "fn": 68
+        },
+        "patches": {
+          "tp": 141,
+          "fp": 7,
+          "fn": 52
+        },
+        "pitted_surface": {
+          "tp": 53,
+          "fp": 3,
+          "fn": 34
+        },
+        "rolled-in_scale": {
+          "tp": 23,
+          "fp": 7,
+          "fn": 109
+        },
+        "scratches": {
+          "tp": 64,
+          "fp": 20,
+          "fn": 57
+        }
+      }
+    }
+  ]
+}

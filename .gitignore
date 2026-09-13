@@ -1,0 +1,32 @@
+# ---- never upload ----
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# datasets & regenerable data (archive.zip IS included; everything below
+# is rebuilt with: python training\prepare_dataset.py)
+data/raw/
+data/yolo/
+data/demo/
+data/detections.db
+
+# heavy training runs (evidence kept in outputs/evaluation + CSV)
+outputs/training/
+outputs/detections/
+outputs/annotation_checks/
+
+# runtime / logs
+logs/
+*.log
+
+# base pretrained weights (auto-download by Ultralytics)
+yolov8n.pt
+yolov8s.pt
+
+# OS / editor
+Thumbs.db
+.DS_Store
+.env

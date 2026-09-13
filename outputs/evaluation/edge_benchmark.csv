@@ -1,0 +1,7 @@
+backend,device,provider,precision,imgsz,avg_inference_ms,median_inference_ms,p95_inference_ms,estimated_fps,model_size_mb,notes
+pytorch,cpu,CPU,FP32,320,121.2,27.97,31.47,35.7,6.21,
+pytorch,cuda,CUDA,FP32,320,1203.71,12.77,27.87,78.3,6.21,
+pytorch,cuda,CUDA,FP16,320,14.48,13.49,19.05,74.1,6.21,
+onnxruntime,cpu,CPUExecutionProvider,FP32,320,16.19,16.23,17.52,61.6,12.14,
+onnxruntime,cuda,CUDAExecutionProvider,FP32,320,,,,,12.14,unavailable: onnxruntime built without CUDA EP
+tensorrt,cuda,TensorRT,FP16,320,,,,,,TensorRT unavailable — continuing with ONNX Runtime/PyTorch

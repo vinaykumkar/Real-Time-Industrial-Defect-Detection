@@ -1,0 +1,64 @@
+{
+  "architecture": "yolov8n.pt",
+  "training_date": "2026-09-12T20:42:20",
+  "epochs_trained": 60,
+  "epochs_requested": 60,
+  "image_size": 320,
+  "batch": 16,
+  "optimizer": "auto",
+  "lr0": 0.01,
+  "augmentation": {
+    "mosaic": 1.0,
+    "mixup": 0.0,
+    "degrees": 5.0,
+    "fliplr": 0.5,
+    "flipud": 0.0,
+    "hsv_v": 0.2
+  },
+  "classes": [
+    "crazing",
+    "inclusion",
+    "patches",
+    "pitted_surface",
+    "rolled-in_scale",
+    "scratches"
+  ],
+  "mAP50": 0.7247,
+  "mAP50_95": 0.3939,
+  "precision": 0.6856,
+  "recall": 0.6861,
+  "f1": 0.6858,
+  "per_class": {
+    "crazing": {
+      "AP50": 0.4865,
+      "AP50_95": 0.2066
+    },
+    "inclusion": {
+      "AP50": 0.8247,
+      "AP50_95": 0.4518
+    },
+    "patches": {
+      "AP50": 0.9231,
+      "AP50_95": 0.6046
+    },
+    "pitted_surface": {
+      "AP50": 0.7915,
+      "AP50_95": 0.4652
+    },
+    "rolled-in_scale": {
+      "AP50": 0.4856,
+      "AP50_95": 0.2114
+    },
+    "scratches": {
+      "AP50": 0.8365,
+      "AP50_95": 0.4234
+    }
+  },
+  "recommended_confidence_threshold": 0.35,
+  "iou_threshold": 0.45,
+  "device_used": "cuda",
+  "source_experiment": "exp_imgsz320",
+  "source_run": "outputs\\training\\runs\\exp_imgsz320",
+  "weights": "D:\\NEU\\models\\best.pt",
+  "note": "Trained and evaluated on the NEU dataset (research demonstration \u2014 not production-certified)."
+}

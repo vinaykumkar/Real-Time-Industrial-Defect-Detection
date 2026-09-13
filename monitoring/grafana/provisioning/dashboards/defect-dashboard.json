@@ -1,0 +1,69 @@
+{
+  "title": "Industrial Defect Detection",
+  "uid": "defect-detection",
+  "tags": ["industrial", "quality-control"],
+  "timezone": "browser",
+  "refresh": "5s",
+  "time": { "from": "now-30m", "to": "now" },
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Inspection Requests",
+      "gridPos": { "x": 0, "y": 0, "w": 6, "h": 5 },
+      "targets": [{ "expr": "increase(defect_detection_requests_total[30m])" }]
+    },
+    {
+      "type": "stat",
+      "title": "PASS total",
+      "gridPos": { "x": 6, "y": 0, "w": 6, "h": 5 },
+      "targets": [{ "expr": "increase(inspection_pass_total[30m])" }]
+    },
+    {
+      "type": "stat",
+      "title": "REJECT total",
+      "gridPos": { "x": 12, "y": 0, "w": 6, "h": 5 },
+      "targets": [{ "expr": "increase(inspection_reject_total[30m])" }]
+    },
+    {
+      "type": "gauge",
+      "title": "Camera FPS",
+      "gridPos": { "x": 18, "y": 0, "w": 6, "h": 5 },
+      "targets": [{ "expr": "current_camera_fps" }]
+    },
+    {
+      "type": "timeseries",
+      "title": "Inference Latency (s) — p95 & avg",
+      "gridPos": { "x": 0, "y": 5, "w": 12, "h": 8 },
+      "targets": [
+        { "expr": "histogram_quantile(0.95, sum(rate(inference_latency_seconds_bucket[5m])) by (le))" },
+        { "expr": "sum(rate(inference_latency_seconds_sum[5m])) / sum(rate(inference_latency_seconds_count[5m]))" }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Defects Detected by Class",
+      "gridPos": { "x": 12, "y": 5, "w": 12, "h": 8 },
+      "targets": [{ "expr": "sum(rate(defects_detected_total[5m])) by (defect_class)" }]
+    },
+    {
+      "type": "stat",
+      "title": "API Errors",
+      "gridPos": { "x": 0, "y": 13, "w": 6, "h": 5 },
+      "targets": [{ "expr": "increase(api_errors_total[30m])" }]
+    },
+    {
+      "type": "stat",
+      "title": "Camera Status (1=online)",
+      "gridPos": { "x": 6, "y": 13, "w": 6, "h": 5 },
+      "targets": [{ "expr": "camera_status" }]
+    },
+    {
+      "type": "stat",
+      "title": "Camera Uptime (s)",
+      "gridPos": { "x": 12, "y": 13, "w": 6, "h": 5 },
+      "targets": [{ "expr": "camera_uptime_seconds" }]
+    }
+  ],
+  "schemaVersion": 39,
+  "version": 1
+}

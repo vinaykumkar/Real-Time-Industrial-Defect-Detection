@@ -1,0 +1,48 @@
+# Real-Time Industrial Defect Detection System — full monitoring stack.
+# The core application runs fine WITHOUT Docker on Windows; this file is
+# only needed for the optional Prometheus + Grafana monitoring stack.
+#
+#   docker compose up -d
+#   app         -> http://localhost:8000
+#   prometheus  -> http://localhost:9090
+#   grafana     -> http://localhost:3000  (admin/admin)
+#
+# Grafana is OPTIONAL: the core project never requires Docker or Grafana.
+
+services:
+  app:
+    build: .
+    container_name: defect-app
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./models:/workspace/models
+      - ./outputs:/workspace/outputs
+      - ./logs:/workspace/logs
+      - ./data:/workspace/data
+    environment:
+      - LOG_LEVEL=INFO
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: defect-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    # inside compose network the app is reachable at app:8000
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: defect-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+    depends_on:
+      - prometheus
+    restart: unless-stopped

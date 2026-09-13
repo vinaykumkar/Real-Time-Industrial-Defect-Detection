@@ -1,0 +1,26 @@
+{
+  "images_analysed": 360,
+  "gt_boxes": 854,
+  "pred_boxes": 819,
+  "true_positives": 561,
+  "false_positives": 258,
+  "false_negatives": 293,
+  "low_confidence_predictions": 0,
+  "fp_by_class": {
+    "crazing": 57,
+    "inclusion": 36,
+    "scratches": 68,
+    "patches": 38,
+    "pitted_surface": 11,
+    "rolled-in_scale": 48
+  },
+  "fn_by_class": {
+    "crazing": 95,
+    "inclusion": 42,
+    "patches": 28,
+    "pitted_surface": 28,
+    "rolled-in_scale": 65,
+    "scratches": 35
+  },
+  "confusion_gt_to_pred": {}
+}

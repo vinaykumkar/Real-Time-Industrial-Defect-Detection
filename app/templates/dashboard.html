@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Real-Time Industrial Defect Detection System</title>
+<link rel="stylesheet" href="/static/dashboard.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="app">
+  <!-- ============================ SIDEBAR ============================ -->
+  <aside class="sidebar">
+    <div class="side-brand">
+      <div class="brand-mark">QC</div>
+      <div>
+        <div class="side-title">DEFECT DETECTION</div>
+        <div class="side-sub">Quality Control Center</div>
+      </div>
+    </div>
+    <nav class="side-nav" id="side-nav">
+      <span class="nav-group">Monitoring</span>
+      <button class="nav-item active" data-tab="overview"><span class="ni-ico">▦</span>Overview</button>
+      <button class="nav-item" data-tab="live"><span class="ni-ico">◉</span>Live Inspection</button>
+      <button class="nav-item" data-tab="image"><span class="ni-ico">⛶</span>Image Inspection</button>
+      <button class="nav-item" data-tab="video"><span class="ni-ico">▶</span>Video Inspection</button>
+      <span class="nav-group">Records &amp; Insight</span>
+      <button class="nav-item" data-tab="history"><span class="ni-ico">☰</span>Inspection History</button>
+      <button class="nav-item" data-tab="analytics"><span class="ni-ico">◷</span>Analytics</button>
+      <span class="nav-group">System</span>
+      <button class="nav-item" data-tab="model"><span class="ni-ico">◈</span>Model Performance</button>
+      <button class="nav-item" data-tab="dataset"><span class="ni-ico">▤</span>Dataset Explorer</button>
+      <button class="nav-item" data-tab="health"><span class="ni-ico">♥</span>System Health</button>
+      <button class="nav-item" data-tab="settings"><span class="ni-ico">⚙</span>Settings</button>
+    </nav>
+    <div class="side-footer">
+      <div class="sf-row"><span>VERSION</span><b id="sf-version">…</b></div>
+      <div class="sf-row"><span>MODEL</span><b id="sf-model">…</b></div>
+      <div class="sf-row"><span>BACKEND</span><b id="sf-backend">…</b></div>
+      <a class="sf-link" href="/docs" target="_blank">API Documentation →</a>
+    </div>
+  </aside>
+
+  <!-- ============================ MAIN ============================ -->
+  <div class="main">
+    <header class="topbar">
+      <div class="tb-title">
+        <h1>REAL-TIME INDUSTRIAL DEFECT DETECTION SYSTEM</h1>
+        <span class="tb-sub">AI-Powered Manufacturing Quality Control · NEU Surface Defects</span>
+      </div>
+      <div class="status-chips">
+        <span class="chip" id="chip-model">MODEL <b>…</b></span>
+        <span class="chip" id="chip-camera">CAMERA <b>…</b></span>
+        <span class="chip" id="chip-backend">BACKEND <b>…</b></span>
+        <span class="chip" id="chip-device">DEVICE <b>…</b></span>
+        <span class="chip" id="chip-fps">FPS <b>…</b></span>
+      </div>
+    </header>
+
+    <main class="content">
+    <!-- ============================== OVERVIEW ============================== -->
+    <section id="tab-overview" class="panel active">
+      <div class="kpi-grid">
+        <div class="kpi"><span class="kpi-label">TOTAL INSPECTED</span><span class="kpi-value" id="kpi-total">…</span><span class="kpi-sub" id="kpi-total-sub">inspection events</span></div>
+        <div class="kpi pass"><span class="kpi-label">PASSED</span><span class="kpi-value" id="kpi-pass">…</span><span class="kpi-sub">no defect above threshold</span></div>
+        <div class="kpi fail"><span class="kpi-label">REJECTED</span><span class="kpi-value" id="kpi-reject">…</span><span class="kpi-sub">defects detected</span></div>
+        <div class="kpi"><span class="kpi-label">DEFECT RATE</span><span class="kpi-value" id="kpi-rate">…</span><span class="kpi-sub">rejected / total</span></div>
+        <div class="kpi"><span class="kpi-label">AVG INFERENCE LATENCY</span><span class="kpi-value" id="kpi-latency">…</span><span class="kpi-sub">model inference</span></div>
+        <div class="kpi"><span class="kpi-label">CURRENT FPS</span><span class="kpi-value" id="kpi-fps">…</span><span class="kpi-sub" id="kpi-fps-sub">camera stream</span></div>
+      </div>
+      <div class="grid-2">
+        <div class="card"><h3>Defects by Type</h3><div class="chart-box"><canvas id="chart-by-type"></canvas></div><p class="empty hidden" id="empty-by-type">No production detections available yet.</p></div>
+        <div class="card"><h3>Pass vs Reject</h3><div class="chart-box"><canvas id="chart-pass-reject"></canvas></div><p class="empty hidden" id="empty-pr">No production detections available yet.</p></div>
+        <div class="card"><h3>Defect Trend Over Time</h3><div class="chart-box"><canvas id="chart-trend"></canvas></div><p class="empty hidden" id="empty-trend">No production detections available yet.</p></div>
+        <div class="card"><h3>Inference Latency Trend</h3><div class="chart-box"><canvas id="chart-lat"></canvas></div><p class="empty hidden" id="empty-lat">No production detections available yet.</p></div>
+      </div>
+      <div class="card">
+        <h3>Recent Detection Events</h3>
+        <table class="data-table" id="overview-recent-table">
+          <thead><tr><th>Time</th><th>Source</th><th>Status</th><th>Defect</th><th>Confidence</th><th>Severity</th><th>Latency</th><th>Backend</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <p class="empty hidden" id="empty-recent">No production detections available yet.</p>
+      </div>
+    </section>
+
+    <!-- ============================== LIVE ============================== -->
+    <section id="tab-live" class="panel">
+      <div class="grid-live">
+        <div class="card">
+          <div class="card-head"><h3>Live Inspection Feed</h3><span class="badge" id="live-stream-state">OFFLINE</span></div>
+          <div class="video-shell">
+            <img id="live-stream" src="" alt="camera offline">
+            <div class="video-overlay" id="live-placeholder">
+              <p class="ov-big">CAMERA OFFLINE</p>
+              <p>Press START CAMERA to begin live inspection.</p>
+            </div>
+          </div>
+          <div class="btn-row">
+            <button class="btn green" id="btn-cam-start">▶ Start Camera</button>
+            <button class="btn red" id="btn-cam-stop">■ Stop</button>
+            <select id="cam-source" class="ctl">
+              <option value="0">Webcam 0</option>
+              <option value="1">Webcam 1</option>
+              <option value="custom">Video file / RTSP…</option>
+            </select>
+            <input id="cam-source-custom" class="ctl hidden" placeholder="path\\video.mp4 or rtsp://…">
+          </div>
+        </div>
+        <div class="stack">
+          <div class="card">
+            <div class="card-head"><h3>Inspection Status</h3><span class="badge" id="live-badge">—</span></div>
+            <div id="live-status" class="big-status unknown">STANDBY</div>
+            <div id="live-status-sub" class="status-sub">no defect above threshold</div>
+            <table class="kv">
+              <tr><td>Detected Defects</td><td id="live-count">—</td></tr>
+              <tr><td>Highest Confidence</td><td id="live-conf">—</td></tr>
+              <tr><td>Max Severity</td><td id="live-severity">—</td></tr>
+              <tr><td>Inference Latency</td><td id="live-lat">—</td></tr>
+              <tr><td>Pipeline Latency</td><td id="live-pipe">—</td></tr>
+              <tr><td>Current FPS</td><td id="live-fps">—</td></tr>
+              <tr><td>Backend</td><td id="live-backend">—</td></tr>
+              <tr><td>Camera Source</td><td id="live-src">—</td></tr>
+              <tr><td>Timestamp</td><td id="live-ts">—</td></tr>
+            </table>
+          </div>
+          <div class="card">
+            <div class="card-head"><h3>PLC Simulator</h3><span class="badge sim">SIMULATED PLC</span></div>
+            <table class="kv">
+              <tr><td>Current Action</td><td id="plc-action">—</td></tr>
+              <tr><td>Last Signal Time</td><td id="plc-last">—</td></tr>
+              <tr><td>Last Defect</td><td id="plc-defect">—</td></tr>
+              <tr><td>Decision Latency</td><td id="plc-lat">—</td></tr>
+            </table>
+            <button class="btn" id="btn-plc-dispatch">Send Latest Inspection to PLC</button>
+            <pre id="plc-dispatch-out" class="mini-console hidden"></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================== IMAGE ============================== -->
+    <section id="tab-image" class="panel">
+      <div class="card dropzone" id="dropzone">
+        <p><b>Drag &amp; drop</b> a metal surface image here, or</p>
+        <div class="btn-row center">
+          <input type="file" id="image-input" accept=".jpg,.jpeg,.png,.bmp,.webp" hidden>
+          <button class="btn" onclick="document.getElementById('image-input').click()">Browse Image</button>
+          <select id="sample-class" class="ctl">
+            <option value="crazing">Crazing</option><option value="inclusion">Inclusion</option>
+            <option value="patches">Patches</option><option value="pitted_surface">Pitted Surface</option>
+            <option value="rolled-in_scale">Rolled-in Scale</option><option value="scratches">Scratches</option>
+          </select>
+          <button class="btn" id="btn-load-sample">Load Sample</button>
+          <span class="muted" id="sample-note" hidden>Sample from NEU validation dataset</span>
+        </div>
+        <div class="spinner hidden" id="image-spinner"><div></div></div>
+      </div>
+      <div class="grid-2">
+        <div class="card"><div class="card-head"><h3>Original</h3><span class="muted" id="img-name"></span></div><img id="img-original" class="inspect-img" alt=""></div>
+        <div class="card"><div class="card-head"><h3>Detected Result</h3><a class="muted hidden" id="img-download" download>download ↓</a></div><img id="img-detected" class="inspect-img" alt=""><div class="img-msg hidden" id="img-detected-msg"></div></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h3>Inspection Result</h3><span class="muted" id="img-backend-tag"></span></div>
+        <div id="image-status" class="big-status unknown">AWAITING IMAGE</div>
+        <div id="image-status-sub" class="status-sub">upload an image to run quality-control inspection</div>
+        <div class="result-meta" id="image-meta"></div>
+        <div id="image-detections" class="det-list"></div>
+      </div>
+    </section>
+
+    <!-- ============================== VIDEO ============================== -->
+    <section id="tab-video" class="panel">
+      <div class="card dropzone" id="videozone">
+        <p><b>Upload a video</b> for frame-by-frame inspection (mp4/avi/mov/mkv)</p>
+        <div class="btn-row center">
+          <input type="file" id="video-input" accept=".mp4,.avi,.mov,.mkv,.wmv" hidden>
+          <button class="btn" onclick="document.getElementById('video-input').click()">Select Video</button>
+        </div>
+        <div class="spinner hidden" id="video-spinner"><div></div></div>
+        <div class="muted" id="video-progress" hidden>Processing…</div>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi"><span class="kpi-label">FRAMES PROCESSED</span><span class="kpi-value" id="v-frames">—</span></div>
+        <div class="kpi"><span class="kpi-label">MEASURED FPS</span><span class="kpi-value" id="v-fps">—</span></div>
+        <div class="kpi"><span class="kpi-label">TOTAL DETECTIONS</span><span class="kpi-value" id="v-dets">—</span></div>
+        <div class="kpi fail"><span class="kpi-label">REJECT EVENTS</span><span class="kpi-value" id="v-rejects">—</span></div>
+        <div class="kpi"><span class="kpi-label">AVG INFERENCE</span><span class="kpi-value" id="v-lat">—</span></div>
+      </div>
+      <div class="grid-2">
+        <div class="card"><h3>Defect Class Counts</h3><div class="chart-box"><canvas id="chart-video-classes"></canvas></div><p class="muted" id="v-most"></p></div>
+        <div class="card"><h3>Processed Video</h3><video id="video-output" controls class="inspect-img"></video></div>
+      </div>
+    </section>
+
+    <!-- ============================== HISTORY ============================== -->
+    <section id="tab-history" class="panel">
+      <div class="card">
+        <div class="btn-row">
+          <select id="history-status" class="ctl"><option value="">All statuses</option><option>PASS</option><option>REJECT</option></select>
+          <select id="history-class" class="ctl"><option value="">All defect types</option></select>
+          <select id="history-severity" class="ctl"><option value="">All severities</option><option>LOW</option><option>MEDIUM</option><option>HIGH</option><option>CRITICAL</option></select>
+          <button class="btn" id="btn-history-refresh">Refresh</button>
+          <button class="btn red" id="btn-history-clear">Clear History</button>
+          <span class="muted" id="history-total"></span>
+        </div>
+        <div class="table-scroll">
+          <table class="data-table" id="history-table">
+            <thead><tr><th>ID</th><th>Time</th><th>Source</th><th>Status</th><th>Defect Type</th><th>Confidence</th><th>Severity</th><th>Bounding Box</th><th>Latency</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="empty hidden" id="history-empty">No inspection history available yet.</p>
+        <div class="btn-row" style="margin-top:8px">
+          <button class="btn" id="btn-history-prev" disabled>← Prev</button>
+          <button class="btn" id="btn-history-next" disabled>Next →</button>
+          <span class="muted" id="history-page"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================== ANALYTICS ============================== -->
+    <section id="tab-analytics" class="panel">
+      <div id="analytics-empty" class="card hidden"><p class="empty">No inspection history is available yet. Start an inspection to populate analytics.</p></div>
+      <div id="analytics-body" class="hidden">
+        <div class="grid-2">
+          <div class="card"><h3>Defects by Class</h3><div class="chart-box"><canvas id="chart-an-class"></canvas></div></div>
+          <div class="card"><h3>Severity Distribution</h3><div class="chart-box"><canvas id="chart-an-sev"></canvas></div></div>
+          <div class="card"><h3>Pass / Reject Trend</h3><div class="chart-box"><canvas id="chart-an-pr"></canvas></div></div>
+          <div class="card"><h3>Average Inference Latency Over Time</h3><div class="chart-box"><canvas id="chart-an-lat"></canvas></div></div>
+          <div class="card"><h3>Average Confidence by Class</h3><div class="chart-box"><canvas id="chart-an-conf"></canvas></div></div>
+          <div class="card"><h3>Detections by Hour of Day</h3><div class="chart-box"><canvas id="chart-an-hour"></canvas></div></div>
+        </div>
+        <div class="card"><h3>Most Common Defect</h3><p id="an-most-common" class="big-text">—</p></div>
+        <p class="muted">Analytics reflect only real production inspections recorded by this system.</p>
+      </div>
+    </section>
+
+    <!-- ============================== MODEL ============================== -->
+    <section id="tab-model" class="panel">
+      <div id="model-missing" class="card hidden"><p class="empty">Custom NEU model unavailable. Train it with: python training\train.py --epochs 1</p></div>
+      <div id="model-body" class="hidden">
+        <div class="kpi-grid">
+          <div class="kpi"><span class="kpi-label">mAP@0.50</span><span class="kpi-value" id="m-map50">—</span></div>
+          <div class="kpi"><span class="kpi-label">mAP@0.50:0.95</span><span class="kpi-value" id="m-map">—</span></div>
+          <div class="kpi"><span class="kpi-label">PRECISION</span><span class="kpi-value" id="m-prec">—</span></div>
+          <div class="kpi"><span class="kpi-label">RECALL</span><span class="kpi-value" id="m-rec">—</span></div>
+          <div class="kpi"><span class="kpi-label">MODEL SIZE</span><span class="kpi-value" id="m-size">—</span></div>
+          <div class="kpi"><span class="kpi-label">RECOMMENDED CONF.</span><span class="kpi-value" id="m-thr">—</span></div>
+        </div>
+        <div class="grid-2">
+          <div class="card"><h3>Model Information</h3><table class="kv" id="m-info-table"></table></div>
+          <div class="card">
+            <h3>Edge Performance (measured)</h3>
+            <div class="table-scroll"><table class="data-table" id="m-bench-table">
+              <thead><tr><th>Backend</th><th>Device</th><th>Precision</th><th>Median</th><th>p95</th><th>FPS</th><th>Size</th></tr></thead>
+              <tbody></tbody>
+            </table></div>
+            <p class="muted" id="m-recommended"></p>
+          </div>
+        </div>
+        <div class="card"><h3>Per-Class Performance</h3>
+          <div class="table-scroll"><table class="data-table" id="m-perclass-table">
+            <thead><tr><th>Class</th><th>AP@0.50</th><th>AP@0.50:0.95</th></tr></thead>
+            <tbody></tbody>
+          </table></div>
+        </div>
+        <div class="grid-2">
+          <div class="card"><h3>Confusion Matrix</h3><img id="m-conf-img" class="inspect-img" alt=""><p class="muted hidden" id="m-conf-msg">Confusion matrix not generated.</p></div>
+          <div class="card"><h3>Training Curves</h3><img id="m-curves-img" class="inspect-img" alt=""><p class="muted hidden" id="m-curves-msg">Training curves not generated.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================== DATASET ============================== -->
+    <section id="tab-dataset" class="panel">
+      <div class="kpi-grid">
+        <div class="kpi"><span class="kpi-label">TOTAL IMAGES</span><span class="kpi-value" id="ds-total">…</span></div>
+        <div class="kpi"><span class="kpi-label">TRAIN IMAGES</span><span class="kpi-value" id="ds-train">…</span></div>
+        <div class="kpi"><span class="kpi-label">VALIDATION IMAGES</span><span class="kpi-value" id="ds-val">…</span></div>
+        <div class="kpi"><span class="kpi-label">ANNOTATIONS</span><span class="kpi-value" id="ds-ann">…</span></div>
+        <div class="kpi"><span class="kpi-label">CLASSES</span><span class="kpi-value">6</span></div>
+      </div>
+      <div class="card">
+        <h3>Browse Real NEU-DET Samples (ground-truth boxes shown)</h3>
+        <div class="btn-row" id="dataset-class-buttons"></div>
+      </div>
+      <div class="grid-cards" id="dataset-grid"><p class="empty">Select a defect class above.</p></div>
+    </section>
+
+    <!-- ============================== HEALTH ============================== -->
+    <section id="tab-health" class="panel">
+      <div class="grid-2">
+        <div class="card"><h3>Services</h3><div id="health-services" class="health-list">…</div></div>
+        <div class="card"><h3>Camera</h3><table class="kv" id="health-camera"></table></div>
+        <div class="card"><h3>System Resources</h3><table class="kv" id="health-resources"></table></div>
+        <div class="card"><h3>Runtime</h3><table class="kv" id="health-runtime"></table></div>
+      </div>
+      <div class="card">
+        <h3>Monitoring</h3>
+        <p class="muted">Prometheus scrapes <code>GET /metrics</code> every 5 s (see monitoring\prometheus.yml). Grafana dashboards available via docker compose when configured.</p>
+        <div class="btn-row"><a class="btn" href="/metrics" target="_blank">View /metrics</a><a class="btn" href="/docs" target="_blank">API Documentation</a></div>
+      </div>
+    </section>
+
+    <!-- ============================== SETTINGS ============================== -->
+    <section id="tab-settings" class="panel">
+      <div class="card">
+        <h3>Inspection Configuration (server runtime)</h3>
+        <table class="kv" id="settings-table"></table>
+        <p class="muted">Change via <code>.env</code> (copy <code>.env.example</code>) and restart the server. Values shown are live server settings.</p>
+      </div>
+      <div class="grid-2">
+        <div class="card"><h3>PLC Simulator</h3><table class="kv" id="plc-table"></table></div>
+        <div class="card"><h3>About</h3>
+          <table class="kv">
+            <tr><td>Dataset</td><td>NEU Surface Defects</td></tr>
+            <tr><td>Defect Classes</td><td>6</td></tr>
+            <tr><td>Detection Model</td><td id="about-model">…</td></tr>
+            <tr><td>Backend</td><td id="about-backend">auto-selectable</td></tr>
+            <tr><td>Purpose</td><td>Manufacturing quality control</td></tr>
+          </table>
+        </div>
+      </div>
+    </section>
+    </main>
+
+    <footer class="footer">NEU Surface Defect Detection · Computer Vision Quality-Control System · <a href="/docs" target="_blank">API Docs</a></footer>
+  </div>
+</div>
+<div id="toast-box" class="toast-box"></div>
+<script src="/static/dashboard.js"></script>
+</body>
+</html>
